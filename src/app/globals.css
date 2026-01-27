@@ -1,15 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui;
+  --font-mono: ui-monospace, monospace;
+
+  --color-hospital-blue: #0056b3;
+  --color-hospital-light: #f8fafc;
+  --color-hospital-gray: #e2e8f0;
+
+  --color-manchester-red: #ef4444;
+  --color-manchester-orange: #f97316;
+  --color-manchester-yellow: #eab308;
+  --color-manchester-green: #22c55e;
+  --color-manchester-blue: #3b82f6;
 }
 
 @media (prefers-color-scheme: dark) {

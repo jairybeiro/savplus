@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web:
+    image: savplus-web:latest
+    build:
+      context: .
+      args:
+        - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+        - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: stop-first # Critical for WhatsApp single session
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.savplus.rule=Host(`savcare.com.br`)"
+        - "traefik.http.routers.savplus.entrypoints=websecure"
+        - "traefik.http.routers.savplus.tls.certresolver=letsencrypt"
+        - "traefik.http.services.savplus.loadbalancer.server.port=3000"
+        - "traefik.http.middlewares.savplus-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.savplus-http.rule=Host(`savcare.com.br`)"
+        - "traefik.http.routers.savplus-http.entrypoints=web"
+        - "traefik.http.routers.savplus-http.middlewares=savplus-https-redirect"
+
+    networks:
+      - traefik-public
+    env_file:
+      - .env.production
+
+networks:
+  traefik-public:
+    external: true
